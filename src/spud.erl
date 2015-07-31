@@ -143,14 +143,14 @@ max_reduce(_Value, Accum) ->
 %% Returns the element of List with the minimum value computed by Func.
 %%
 min_by(List, Func) ->
-    {Min, Result} = min(List, fun (E) -> {Func(E), E} end),
-    {Result, Min}.
+    {_, Result} = min(List, fun (E) -> {Func(E), E} end),
+    Result.
 
 %% Returns the element of List with the maximum value computed by Func.
 %%
 max_by(List, Func) ->
-    {Max, Result} = max(List, fun (E) -> {Func(E), E} end),
-    {Result, Max}.
+    {_, Result} = max(List, fun (E) -> {Func(E), E} end),
+    Result.
 
 %% Applies Func to each value in the List and returns the minimum.  Spawns
 %% a new process for each value to compute Func(Value).
@@ -184,12 +184,12 @@ parallel_max(Limiter, List, Func) ->
 %% Func.  Spawns a new process for each value to compute Func(Value).
 %%
 parallel_min_by(List, Func) ->
-    {Min, Result} = parallel_min(
+    {_, Result} = parallel_min(
 		      List,
 		      fun (Element) ->
 			      {Func(Element), Element}
 		      end),
-    {Result, Min}.
+    Result.
 
 %% Returns the element of List with the minimum value computed by
 %% Func.  A new processs is spawned for each value to compute
@@ -197,24 +197,24 @@ parallel_min_by(List, Func) ->
 %% computed in-process.
 %%
 parallel_min_by(Limiter, List, Func) ->
-    {Min, Result} = parallel_min(
+    {_, Result} = parallel_min(
 		      Limiter,
 		      List,
 		      fun (Element) ->
 			      {Func(Element), Element}
 		      end),
-    {Result, Min}.
+    Result.
 
 %% Returns the element of List with the maximum value computed by
 %% Func.  Spawns a new process for each value to compute Func(Value).
 %%
 parallel_max_by(List, Func) ->
-    {Max, Result} = parallel_max(
+    {_, Result} = parallel_max(
 		      List,
 		      fun (Element) ->
 			      {Func(Element), Element}
 		      end),
-    {Result, Max}.
+    Result.
 
 %% Returns the element of List with the minimum value computed by
 %% Func.  A new processs is spawned for each value to compute
@@ -222,13 +222,13 @@ parallel_max_by(List, Func) ->
 %% computed in-process.
 %%
 parallel_max_by(Limiter, List, Func) ->
-    {Max, Result} = parallel_max(
+    {_, Result} = parallel_max(
 		      Limiter,
 		      List,
 		      fun (Element) ->
 			      {Func(Element), Element}
 		      end),
-    {Result, Max}.
+    Result.
 
 %% Returns the element of Array with the minimum value computed by Func.
 %%
