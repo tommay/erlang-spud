@@ -15,7 +15,8 @@
 
 %% Some handy utility functions.
 
-%% Returns a random sample from the List.
+%% Returns a random sample from the List, using random:uniform/1 which
+%% uses the process dictionary for state.
 %%
 sample(List) when is_list(List) ->
     lists:nth(rnd:uniform(length(List)), List);
@@ -143,8 +144,15 @@ max_reduce(_Value, Accum) ->
 %% Returns the element of List with the minimum value computed by Func.
 %%
 min_by(List, Func) ->
-    {_, Result} = min(List, fun (E) -> {Func(E), E} end),
+    {Result, _Min} = min_by_with_min(List, Func),
     Result.
+
+%% Returns the element of List with the minimum value computed by Func,
+%% and returns the minimum value.
+%%
+min_by_with_min(List, Func) ->
+    {Min, Result} = min(List, fun (E) -> {Func(E), E} end),
+    {Result, Min}.
 
 %% Returns the element of List with the maximum value computed by Func.
 %%
@@ -288,7 +296,9 @@ map_find([H | T], Func) ->
 product(As, Bs) ->
     [{A, B} ||  A <- As, B <- Bs].
 
-%% Returns List with sort keys created by applying Func to each element.
+
+%% Returns List sorted by keys created by applying Func to each
+%% element.
 %%
 sort_by(List, Func) ->
     Augmented = [{Func(E), E} || E <- List],
